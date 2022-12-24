@@ -5,12 +5,14 @@ const ref = {
 };
 
 let colorTimerId = null;
+ref.btnStop.setAttribute('disabled', '');
 
 ref.btnStart.addEventListener('click', onStartClick);
 ref.btnStop.addEventListener('click', onStopClick);
 
 function onStartClick() {
   ref.btnStart.setAttribute('disabled', '');
+  ref.btnStop.removeAttribute('disabled');
 
   colorTimerId = setInterval(() => {
     ref.body.style.backgroundColor = getRandomHexColor();
@@ -18,7 +20,9 @@ function onStartClick() {
 }
 
 function onStopClick() {
-  ref.btnStart.removeAttribute('disabled', '');
+  ref.btnStart.removeAttribute('disabled');
+  ref.btnStop.setAttribute('disabled', '');
+
   clearInterval(colorTimerId);
 }
 
