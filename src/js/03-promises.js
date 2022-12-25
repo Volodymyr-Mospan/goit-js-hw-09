@@ -19,13 +19,33 @@ function onSubmitClick(event) {
     let delay = Number(ref.firstDelay.value);
     let position = 1;
 
-    createPromise(position, delay);
+    createPromise(position, delay)
+      .then(({ position, delay }) => {
+        Notiflix.Notify.success(
+          `✅ Fulfilled promise ${position} in ${delay}ms`
+        );
+      })
+      .catch(({ position, delay }) => {
+        Notiflix.Notify.failure(
+          `❌ Rejected promise ${position} in ${delay}ms`
+        );
+      });
 
     const intervalId = setInterval(() => {
       position += 1;
       delay += Number(ref.step.value);
 
-      createPromise(position, delay);
+      createPromise(position, delay)
+        .then(({ position, delay }) => {
+          Notiflix.Notify.success(
+            `✅ Fulfilled promise ${position} in ${delay}ms`
+          );
+        })
+        .catch(({ position, delay }) => {
+          Notiflix.Notify.failure(
+            `❌ Rejected promise ${position} in ${delay}ms`
+          );
+        });
 
       if (position === Number(ref.amount.value)) {
         clearInterval(intervalId);
@@ -40,15 +60,9 @@ function createPromise(position, delay) {
     const shouldResolve = Math.random() > 0.3;
 
     if (shouldResolve) {
-      resolve(
-        Notiflix.Notify.success(
-          `✅ Fulfilled promise ${position} in ${delay}ms`
-        )
-      );
+      resolve({ position, delay });
     } else {
-      reject(
-        Notiflix.Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`)
-      );
+      reject({ position, delay });
     }
   });
 }
